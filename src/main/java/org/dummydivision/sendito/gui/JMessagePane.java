@@ -34,11 +34,11 @@ public class JMessagePane extends JTextPane {
         bodyStyle.addAttribute(StyleConstants.Bold, false);
 
         senderStyle = sc.addStyle("sender", bodyStyle);
-        senderStyle.addAttribute(StyleConstants.Foreground, Color.RED);
+        senderStyle.addAttribute(StyleConstants.Foreground, Color.BLUE);
         senderStyle.addAttribute(StyleConstants.Bold, true);
 
         recieverStyle = sc.addStyle("reciever", bodyStyle);
-        recieverStyle.addAttribute(StyleConstants.Foreground, Color.BLUE);
+        recieverStyle.addAttribute(StyleConstants.Foreground, Color.RED);
         recieverStyle.addAttribute(StyleConstants.Bold, true);
     }
 
