@@ -12,10 +12,6 @@ import org.ektorp.http.StdHttpClient;
 import org.ektorp.impl.StdCouchDbConnector;
 import org.ektorp.impl.StdCouchDbInstance;
 
-/**
- * Hello world!
- *
- */
 public class App {
 
     public static void main(String[] args) {
@@ -30,9 +26,6 @@ public class App {
 
             db.createDatabaseIfNotExists();
 
-            /*Sofa sofa = db.get(Sofa.class, "ektorp");
-             sofa.setColor("blue");
-             db.update(sofa);*/
             MessageRepository messageRepository = new MessageRepository(db);
             List<Message> messageList = messageRepository.getAll();
             JConversationFrame conversation = new JConversationFrame(messageList, "Jasmin");
