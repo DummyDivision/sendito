@@ -21,6 +21,7 @@ public class JMessagePane extends JTextPane {
         super();
 
         this.self = self;
+        this.setEditable(false);
 
         StyleContext sc = new StyleContext();
         this.setStyledDocument(new DefaultStyledDocument(sc));
