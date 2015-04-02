@@ -1,8 +1,9 @@
 package org.dummydivision.sendito;
 
 import java.net.MalformedURLException;
+import java.util.List;
 import org.dummydivision.sendito.shared.Message;
-import org.dummydivision.sendito.shared.MessageList;
+import org.dummydivision.sendito.shared.MessageRepository;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
 import org.ektorp.http.HttpClient;
@@ -31,8 +32,12 @@ public class App {
             /*Sofa sofa = db.get(Sofa.class, "ektorp");
              sofa.setColor("blue");
              db.update(sofa);*/
-            MessageList messages = new MessageList(db);
-            messages.add(new Message("Dominik", "Jasmin", "Hallo Jasmin!"));
+            MessageRepository messageRepository = new MessageRepository(db);
+            List<Message> messageList = messageRepository.getAll();
+            for (Message m: messageList) {
+                System.out.println(m);
+            }
+            //messages.add(new Message("Dominik", "Jasmin", "Hallo Jasmin!"));
 
         } catch (MalformedURLException ex) {
             System.out.println(ex);
