@@ -1,5 +1,6 @@
 package org.dummydivision.sendito.gui;
 
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.util.List;
 import javax.swing.JFrame;
@@ -17,8 +18,11 @@ public class MessageFrame extends JFrame {
         for (Message m : messages) {
             messageString += m + "\n";
         }
-        add(new JTextArea(messageString));
-
+        JTextArea textArea = new JTextArea(messageString);
+        Color LIGHT_BLUE = new Color(233, 233, 233);
+        textArea.setBackground(LIGHT_BLUE);
+        add(textArea);
+        
         pack();
         setVisible(true);
     }
