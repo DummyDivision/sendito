@@ -1,6 +1,8 @@
 package org.dummydivision.sendito.gui;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -45,7 +47,8 @@ public class JMessagePane extends JTextPane {
     public void addMessage(Message m) {
         try {
             StyledDocument doc = this.getStyledDocument();
-            doc.insertString(doc.getLength(), String.format("%s (%s):\n", m.getSender(), m.getDateSent()), (m.getSender().equals(self) ? senderStyle : recieverStyle));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss, dd.MM.yyyy");
+            doc.insertString(doc.getLength(), String.format("%s (%s):\n", m.getSender(), simpleDateFormat.format(m.getDateSent())), (m.getSender().equals(self) ? senderStyle : recieverStyle));
             doc.insertString(doc.getLength(), m.getBody() + '\n', bodyStyle);
         } catch (BadLocationException ex) {
             System.out.println(ex);
