@@ -2,7 +2,7 @@ package org.dummydivision.sendito;
 
 import java.net.MalformedURLException;
 import java.util.List;
-import org.dummydivision.sendito.gui.MessageFrame;
+import org.dummydivision.sendito.gui.JConversationFrame;
 import org.dummydivision.sendito.shared.Message;
 import org.dummydivision.sendito.shared.MessageRepository;
 import org.ektorp.CouchDbConnector;
@@ -35,7 +35,7 @@ public class App {
              db.update(sofa);*/
             MessageRepository messageRepository = new MessageRepository(db);
             List<Message> messageList = messageRepository.getAll();
-            MessageFrame messageFrame = new MessageFrame(messageList);
+            JConversationFrame conversation = new JConversationFrame(messageList, "Jasmin");
             //messageRepository.add(new Message("Dominik", "Jasmin", "Hallo Jasmin!"));
 
         } catch (MalformedURLException ex) {
