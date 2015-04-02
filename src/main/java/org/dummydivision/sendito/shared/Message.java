@@ -6,7 +6,7 @@ import java.util.Date;
 import org.ektorp.support.CouchDbDocument;
 import org.ektorp.support.TypeDiscriminator;
 
-public class Message extends CouchDbDocument {
+public class Message extends CouchDbDocument implements Comparable<Message> {
 
     @TypeDiscriminator
     private final String sender;
@@ -52,5 +52,9 @@ public class Message extends CouchDbDocument {
     @Override
     public String toString() {
         return String.format("%s (%s):\n%s", sender, dateSent, body);
+    }
+
+    public int compareTo(Message t) {
+        return dateSent.compareTo(t.dateSent);
     }
 }

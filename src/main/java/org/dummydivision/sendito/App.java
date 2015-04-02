@@ -37,7 +37,7 @@ public class App {
             for (Message m: messageList) {
                 System.out.println(m);
             }
-            //messages.add(new Message("Dominik", "Jasmin", "Hallo Jasmin!"));
+            //messageRepository.add(new Message("Dominik", "Jasmin", "Hallo Jasmin!"));
 
         } catch (MalformedURLException ex) {
             System.out.println(ex);
