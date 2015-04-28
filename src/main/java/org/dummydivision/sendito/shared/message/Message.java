@@ -1,4 +1,4 @@
-package org.dummydivision.sendito.shared;
+package org.dummydivision.sendito.shared.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,30 +7,26 @@ import org.ektorp.support.CouchDbDocument;
 import org.ektorp.support.TypeDiscriminator;
 
 public class Message extends CouchDbDocument implements Comparable<Message> {
-
-    @TypeDiscriminator
+    
     private final String sender;
-    private final String reciever;
     private final Date dateSent;
+    @TypeDiscriminator
     private final String body;
-
-    public Message(String sender, String reciever, String body) {
-        this.sender = sender;
-        this.reciever = reciever;
-        this.dateSent = new Date();
-        this.body = body;
-    }
 
     @JsonCreator
     private Message(
             @JsonProperty("sender") String sender,
-            @JsonProperty("reciever") String reciever,
             @JsonProperty("dateSent") Date dateSent,
             @JsonProperty("body") String body) {
         this.sender = sender;
-        this.reciever = reciever;
         this.dateSent = dateSent;
         this.body = body;
+    }
+    
+    public Message(String message) {
+        this.sender = null;
+        this.dateSent = null;
+        this.body = message;
     }
 
     public String getBody() {
@@ -39,10 +35,6 @@ public class Message extends CouchDbDocument implements Comparable<Message> {
 
     public String getSender() {
         return sender;
-    }
-
-    public String getReciever() {
-        return reciever;
     }
 
     public Date getDateSent() {
