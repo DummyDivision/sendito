@@ -1,6 +1,8 @@
 package org.dummydivision.sendito.gui;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,37 +13,67 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class JLoginDialog extends JFrame {
-        JTextField username;
-        
-        JTextField password;   
+public class JLoginDialog extends JDialog {
 
-    public JLoginDialog() throws HeadlessException {
-        super();
-        setTitle("Sendito - Login");
+    JTextField username;
+    JTextField password;
+
+    public JLoginDialog(JFrame parent) throws HeadlessException {
+        super(parent, "Sendito - Login", ModalityType.TOOLKIT_MODAL);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         setupGUI();
-        setPreferredSize(new Dimension(800, 600));
-
         pack();
-        setVisible(true);
+
+        setResizable(false);
+        setLocationRelativeTo(null); // Center this window
     }
 
-    private void setupGUI() {
-        JPanel mainPanel = new JPanel();
-        JLabel lblUsername = new JLabel("Username:");   
-        JLabel lblPassword = new JLabel("Password:");
+    private JPanel buildLoginPanel() {
+        JPanel loginPanel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel lblUsername = new JLabel("Username:");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        loginPanel.add(lblUsername, gbc);
 
         username = new JTextField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        loginPanel.add(username, gbc);
+
+        JLabel lblPassword = new JLabel("Password:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        loginPanel.add(lblPassword, gbc);
+
         password = new JTextField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        loginPanel.add(password, gbc);
+
+        return loginPanel;
+    }
+
+    private JPanel buildButtonPanel() {
+        JPanel buttonPanel = new JPanel();
+
         JButton btnLogin = new JButton("Login");
-       btnLogin.addActionListener(new ActionListener() {
+        btnLogin.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
             }
         });
+        buttonPanel.add(btnLogin);
+
         JButton btnCancel = new JButton("Cancel");
         btnCancel.addActionListener(new ActionListener() {
 
@@ -49,118 +81,14 @@ public class JLoginDialog extends JFrame {
                 System.exit(0);
             }
         });
-        mainPanel.add(lblUsername);
-        mainPanel.add(lblPassword);
-        mainPanel.add(username);
-        mainPanel.add(password);
-        
-        
-      add(mainPanel);
-    }
-
-    public String getUsername() {
-        return username.getText();     
-    }
-
-    public String getPassword() {
-       
-        return password.getText();
-    }
-
-}
-
-/*
-public class JLoginDialog extends JDialog {
-
-    private boolean canceled = true;
-    private JTextField username = null;
-    private JTextField password = null;
-
-    public JLoginDialog() throws HeadlessException {
-        super();
-        setTitle("Sendito - Login");
-        setModalityType(ModalityType.APPLICATION_MODAL);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-        setupGUI();
-        setPreferredSize(new Dimension(800, 600));
-
-        pack();
-        setVisible(true);
-    }
-
-    private void setupGUI() {
-        JPanel mainPanel = buildMainPanel();
-        this.add(mainPanel);
-    }
-
-    private JPanel buildMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-
-        mainPanel.add(buildInputPanel(), BorderLayout.CENTER);
-        mainPanel.add(buildButtonPanel(), BorderLayout.SOUTH);
-
-        return mainPanel;
-    }
-
-    private JPanel buildInputPanel() {
-        JPanel inputPanel = new JPanel(new GridBagLayout());
-
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        inputPanel.add(new JLabel("Username"), constraints);
-
-        username = new JTextField(20);
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.gridwidth = 2;
-        inputPanel.add(username, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        inputPanel.add(new JLabel("Password"), constraints);
-
-        password = new JTextField(20);
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        constraints.gridwidth = 2;
-        inputPanel.add(password, constraints);
-
-        return inputPanel;
-    }
-
-    private JPanel buildButtonPanel() {
-        JPanel buttonPanel = new JPanel(new BorderLayout());
-
-        JButton loginButton = new JButton("Login");
-        loginButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ae) {
-                canceled = false;
-                setVisible(false);
-            }
-        });
-        buttonPanel.add(loginButton, BorderLayout.WEST);
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ae) {
-                setVisible(false);
-            }
-        });
-        buttonPanel.add(cancelButton, BorderLayout.EAST);
+        buttonPanel.add(btnCancel);
 
         return buttonPanel;
     }
 
-    public boolean isCanceled() {
-        return canceled;
+    private void setupGUI() {
+        getContentPane().add(buildLoginPanel(), BorderLayout.CENTER);
+        getContentPane().add(buildButtonPanel(), BorderLayout.PAGE_END);
     }
 
     public String getUsername() {
@@ -168,7 +96,8 @@ public class JLoginDialog extends JDialog {
     }
 
     public String getPassword() {
+
         return password.getText();
     }
+
 }
-*/
