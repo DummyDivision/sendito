@@ -12,20 +12,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.dummydivision.sendito.shared.message.Message;
 import org.dummydivision.sendito.shared.message.MessageRepository;
+import org.ektorp.changes.ChangesFeed;
 
 public class JConversationFrame extends JFrame {
 
     private final MessageRepository messageRepository;
     private final String self;
+    private ChangeWatcher changeWatcher;
 
     private void onSendMessage(JMessagePane messagePane, JTextField input) {
-        // TODO: get updates not here, but from the ChangeFeed
-        Message m = messageRepository.add(input.getText());
+        messageRepository.add(input.getText());
         input.setText(null);
-        messagePane.addMessage(m);
     }
 
-    private void setupGUI() {
+    private JMessagePane setupGUI() {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         final JMessagePane messagePane = new JMessagePane(self);
@@ -60,9 +60,11 @@ public class JConversationFrame extends JFrame {
         mainPanel.add(inputPanel, BorderLayout.SOUTH);
 
         this.add(mainPanel);
+        
+        return messagePane;
     }
 
-    public JConversationFrame(MessageRepository messageRepository, String self) throws HeadlessException {
+    public JConversationFrame(MessageRepository messageRepository, String self, ChangesFeed feed) throws HeadlessException {
         super();
         this.messageRepository = messageRepository;
         this.self = self;
@@ -70,7 +72,8 @@ public class JConversationFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Sendito");
 
-        setupGUI();
+        this.changeWatcher = new ChangeWatcher(feed, messageRepository, setupGUI());
+        this.changeWatcher.start();
         setPreferredSize(new Dimension(800, 600));
 
         pack();

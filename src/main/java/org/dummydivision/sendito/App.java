@@ -7,6 +7,8 @@ import org.dummydivision.sendito.shared.message.MessageRepository;
 import org.dummydivision.sendito.shared.server.ServerRepository;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
+import org.ektorp.changes.ChangesCommand;
+import org.ektorp.changes.ChangesFeed;
 import org.ektorp.http.HttpClient;
 import org.ektorp.http.StdHttpClient;
 import org.ektorp.impl.StdCouchDbConnector;
@@ -47,7 +49,14 @@ public class App {
             CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
             CouchDbConnector db = new StdCouchDbConnector("couchdb_sendito_ektorp", dbInstance);
             MessageRepository messageRepository = new MessageRepository(db);
-            JConversationFrame conversation = new JConversationFrame(messageRepository, loginDialog.getUsername());
+            
+            ChangesCommand cmd = new ChangesCommand.Builder()
+                    .includeDocs(true)
+                    .continuous(true)
+                    .build();
+            ChangesFeed feed = db.changesFeed(cmd);
+            
+            JConversationFrame conversation = new JConversationFrame(messageRepository, loginDialog.getUsername(), feed);
         } catch (MalformedURLException ex) {
             System.out.println(ex);
         }
