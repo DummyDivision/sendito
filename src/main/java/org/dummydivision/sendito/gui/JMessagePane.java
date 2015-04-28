@@ -10,19 +10,20 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+import org.dummydivision.sendito.shared.SenditoBasicServer;
 import org.dummydivision.sendito.shared.message.Message;
 
 public class JMessagePane extends JTextPane {
 
-    final private String self;
+    final private SenditoBasicServer server;
     final private Style bodyStyle;
     final private Style senderStyle;
     final private Style recieverStyle;
 
-    public JMessagePane(String self) {
+    public JMessagePane(SenditoBasicServer server) {
         super();
 
-        this.self = self;
+        this.server = server;
         this.setEditable(false);
 
         StyleContext sc = new StyleContext();
@@ -48,7 +49,7 @@ public class JMessagePane extends JTextPane {
         try {
             StyledDocument doc = this.getStyledDocument();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss, dd.MM.yyyy");
-            doc.insertString(doc.getLength(), String.format("%s (%s):\n", m.getSender(), simpleDateFormat.format(m.getDateSent())), (m.getSender().equals(self) ? senderStyle : recieverStyle));
+            doc.insertString(doc.getLength(), String.format("%s (%s):\n", m.getSender(), simpleDateFormat.format(m.getDateSent())), (m.getSender().equals(server.getSelf()) ? senderStyle : recieverStyle));
             doc.insertString(doc.getLength(), m.getBody() + '\n', bodyStyle);
         } catch (BadLocationException ex) {
             System.out.println(ex);

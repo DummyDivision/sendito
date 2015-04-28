@@ -12,21 +12,28 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.dummydivision.sendito.shared.LoginVerifier;
 
 public class JLoginDialog extends JDialog {
 
-    JTextField username;
-    JTextField password;
+    private JTextField username;
+    private JTextField password;
+    private boolean success = false;
 
-    public JLoginDialog(JFrame parent) throws HeadlessException {
-        super(parent, "Sendito - Login", ModalityType.TOOLKIT_MODAL);
+    public JLoginDialog(String title) {
+        this(null, title, ModalityType.TOOLKIT_MODAL);
+    }
+
+    public JLoginDialog(JFrame parent, String title, ModalityType mt) throws HeadlessException {
+        super(parent, title, mt);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        setupGUI();
+        getContentPane().add(buildLoginPanel(), BorderLayout.CENTER);
+        getContentPane().add(buildButtonPanel(), BorderLayout.PAGE_END);
         pack();
 
         setResizable(false);
-        setLocationRelativeTo(null); // Center this window
+        setLocationRelativeTo(parent); // Respect parent's location
     }
 
     private JPanel buildLoginPanel() {
@@ -69,6 +76,7 @@ public class JLoginDialog extends JDialog {
         btnLogin.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                success = true;
                 setVisible(false);
             }
         });
@@ -78,7 +86,7 @@ public class JLoginDialog extends JDialog {
         btnCancel.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                setVisible(false);
             }
         });
         buttonPanel.add(btnCancel);
@@ -86,9 +94,10 @@ public class JLoginDialog extends JDialog {
         return buttonPanel;
     }
 
-    private void setupGUI() {
-        getContentPane().add(buildLoginPanel(), BorderLayout.CENTER);
-        getContentPane().add(buildButtonPanel(), BorderLayout.PAGE_END);
+    public boolean showDialog(String username) {
+        this.username.setText(username);
+        setVisible(true);
+        return success;
     }
 
     public String getUsername() {
@@ -96,8 +105,6 @@ public class JLoginDialog extends JDialog {
     }
 
     public String getPassword() {
-
         return password.getText();
     }
-
 }

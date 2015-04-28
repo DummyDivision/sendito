@@ -11,8 +11,9 @@ public class Server extends CouchDbDocument {
     @TypeDiscriminator
     private final String uri;
 
+    // TODO: Change to private
     @JsonCreator
-    private Server(
+    public Server(
             @JsonProperty("name") String name,
             @JsonProperty("uri") String url) {
         this.name = name;
