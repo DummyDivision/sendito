@@ -37,9 +37,6 @@ public class App {
 
             JLoginDialog loginDialog = new JLoginDialog();
             loginDialog.setVisible(true);
-            if (loginDialog.isCanceled()) {
-                System.exit(0);
-            }
 
             System.out.println("Logging in...");
             HttpClient httpClient = new StdHttpClient.Builder()

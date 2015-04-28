@@ -1,18 +1,75 @@
 package org.dummydivision.sendito.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+public class JLoginDialog extends JFrame {
+        JTextField username;
+        
+        JTextField password;   
+
+    public JLoginDialog() throws HeadlessException {
+        super();
+        setTitle("Sendito - Login");
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        setupGUI();
+        setPreferredSize(new Dimension(800, 600));
+
+        pack();
+        setVisible(true);
+    }
+
+    private void setupGUI() {
+        JPanel mainPanel = new JPanel();
+        JLabel lblUsername = new JLabel("Username:");   
+        JLabel lblPassword = new JLabel("Password:");
+
+        username = new JTextField(20);
+        password = new JTextField(20);
+        JButton btnLogin = new JButton("Login");
+       btnLogin.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
+        JButton btnCancel = new JButton("Cancel");
+        btnCancel.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        mainPanel.add(lblUsername);
+        mainPanel.add(lblPassword);
+        mainPanel.add(username);
+        mainPanel.add(password);
+        
+        
+      add(mainPanel);
+    }
+
+    public String getUsername() {
+        return username.getText();     
+    }
+
+    public String getPassword() {
+       
+        return password.getText();
+    }
+
+}
+
+/*
 public class JLoginDialog extends JDialog {
 
     private boolean canceled = true;
@@ -114,3 +171,4 @@ public class JLoginDialog extends JDialog {
         return password.getText();
     }
 }
+*/
