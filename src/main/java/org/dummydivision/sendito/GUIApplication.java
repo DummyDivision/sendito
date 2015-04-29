@@ -102,8 +102,10 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
                     if (!serverList.nextServer()) {
                         // We tried all available servers
                         JOptionPane.showMessageDialog(null, "Could not establish connection to a server.", "Sendito - Error", JOptionPane.ERROR_MESSAGE);
+                        serverList.reset();
+                    } else {
+                        s = serverList.getServer();
                     }
-                    s = serverList.getServer();
                 } else if (!loggedIn) {
                     // Our login failed
                     JOptionPane.showMessageDialog(null, "The username or password you specified is invalid.", "Sendito - Error", JOptionPane.ERROR_MESSAGE);
@@ -135,7 +137,7 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
 
     public void onLostConnection() {
         db = null;
-        
+
         // Disable the GUI
         conversationFrame.onLostConnection();
 
@@ -151,7 +153,7 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
                     s = serverList.getServer();
                 }
             }
-        }        
+        }
         messageRepository = new MessageRepository(db);
         serverList.updateFromRepository(new ServerRepository(db));
 
@@ -166,7 +168,7 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
     public void onAddServer(String id) {
         ServerRepository repository = new ServerRepository(db);
         serverList.addServer(repository.get(id));
-        
+
         conversationFrame.onAddServer(id);
     }
 

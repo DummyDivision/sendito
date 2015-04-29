@@ -7,7 +7,7 @@ import org.ektorp.support.CouchDbDocument;
 import org.ektorp.support.TypeDiscriminator;
 
 public class Message extends CouchDbDocument implements Comparable<Message> {
-    
+
     private final String sender;
     private final Date dateSent;
     @TypeDiscriminator
@@ -22,7 +22,7 @@ public class Message extends CouchDbDocument implements Comparable<Message> {
         this.dateSent = dateSent;
         this.body = body;
     }
-    
+
     public Message(String message) {
         this.sender = null;
         this.dateSent = null;

@@ -32,8 +32,8 @@ public class JInputPanel extends JPanel implements ActionListener {
         input.setText(null);
     }
 
-    /*public void setEnabled(boolean bln) {
-     input.setEnabled(bln);
-     sendButton.setEnabled(bln);
-     }*/
+    public void setEnabled(boolean bln) {
+        input.setEnabled(bln);
+        sendButton.setEnabled(bln);
+    }
 }

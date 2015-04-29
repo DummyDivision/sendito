@@ -2,7 +2,6 @@ package org.dummydivision.sendito.gui;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;

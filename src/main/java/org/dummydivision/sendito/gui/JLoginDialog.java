@@ -109,6 +109,9 @@ public class JLoginDialog extends JDialog {
 
     public boolean showDialog(String username) {
         this.username.setText(username);
+        if (username != null) {
+            this.password.requestFocus();
+        }
         setVisible(true);
         return success;
     }

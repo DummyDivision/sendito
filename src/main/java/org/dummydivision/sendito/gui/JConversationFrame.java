@@ -37,11 +37,15 @@ public class JConversationFrame extends JFrame implements SenditoBasicClient {
     }
 
     public void onLostConnection() {
+        setTitle("Sendito [No Connection]");
+
         // Disable the GUI
         inputPanel.setEnabled(false);
     }
 
     public void onRestoreConnection() {
+        setTitle(server.getSelf() + " - Sendito");
+
         // Re-Enable the GUI
         inputPanel.setEnabled(true);
     }

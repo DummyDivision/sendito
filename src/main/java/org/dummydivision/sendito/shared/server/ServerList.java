@@ -30,13 +30,8 @@ public class ServerList {
     }
 
     public boolean nextServer() {
-        Server s = availableServers.poll();
-        if (s == null) {
-            return false;
-        } else {
-            unreachableServers.add(s);
-            return true;
-        }
+        unreachableServers.add(availableServers.poll());
+        return availableServers.size() != 0;
     }
 
     private void loadFromFile(File settingsFile) {
@@ -86,5 +81,13 @@ public class ServerList {
         availableServers.add(s);
 
         saveToFile();
+    }
+
+    public void reset() {
+        for (Server s : unreachableServers) {
+            availableServers.add(s);
+        }
+
+        unreachableServers.clear();
     }
 }
