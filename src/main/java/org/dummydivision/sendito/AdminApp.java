@@ -13,29 +13,36 @@ import org.ektorp.http.StdHttpClient;
 import org.ektorp.impl.StdCouchDbConnector;
 import org.ektorp.impl.StdCouchDbInstance;
 
+/**
+ * Temporary main class to setup a database. Usually this should not be used.
+ */
 public class AdminApp {
 
-    private static void initializeDatabase() {
+    /**
+     * Starts the application.
+     *
+     * @param args ignored
+     */
+    public static void main(String[] args) {
         try {
-            System.out.println("Creating DB...");
             HttpClient httpClient = new StdHttpClient.Builder()
                     .url("http://localhost:5984")
                     .build();
 
             CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-            CouchDbConnector db = new StdCouchDbConnector("couchdb_sendito_ektorp", dbInstance);
+            CouchDbConnector db = new StdCouchDbConnector("sendito", dbInstance);
+
             db.createDatabaseIfNotExists();
+
             MessageRepository messageRepository = new MessageRepository(db);
+
             ServerRepository serverRepository = new ServerRepository(db);
             serverRepository.add(new Server("Localhost", "http://localhost:5984"));
+
             ServerList list = new ServerList(new File("servers.list"));
             list.updateFromRepository(serverRepository);
         } catch (MalformedURLException ex) {
             System.out.println(ex);
         }
-    }
-
-    public static void main(String[] args) {
-        initializeDatabase();
     }
 }
