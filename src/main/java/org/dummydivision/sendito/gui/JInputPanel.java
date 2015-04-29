@@ -1,6 +1,7 @@
 package org.dummydivision.sendito.gui;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -19,6 +20,8 @@ public class JInputPanel extends JPanel implements ActionListener {
     private final JButton sendButton;
     // Allows us to access sendito's functionality
     private final SenditoBasicServer server;
+    // Window to browse history
+    private final JHistoryFrame historyFrame;
 
     /**
      * Construct a new panel. The server will be stored and cannot be changed!
@@ -29,15 +32,29 @@ public class JInputPanel extends JPanel implements ActionListener {
     public JInputPanel(SenditoBasicServer server) {
         super(new BorderLayout());
         this.server = server;
+        historyFrame = new JHistoryFrame(server);
 
         // Construct the GUI
         input = new JTextField();
         input.addActionListener(this); // "this" leaking should not be a problem here
         add(input, BorderLayout.CENTER);
 
+        // Panel to hold send and history button
+        JPanel buttons = new JPanel(new FlowLayout());
         sendButton = new JButton("Send");
-        sendButton.addActionListener(this); // See above
-        add(sendButton, BorderLayout.EAST);
+        sendButton.addActionListener(this);
+        buttons.add(sendButton);
+        
+        JButton historyButton = new JButton("History");
+        historyButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                // Just show the history window
+                historyFrame.setVisible(true);
+            }
+        });
+        buttons.add(historyButton);
+        add(buttons, BorderLayout.EAST);
     }
 
     /**

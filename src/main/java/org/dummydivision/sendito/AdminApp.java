@@ -18,6 +18,9 @@ import org.ektorp.impl.StdCouchDbInstance;
  */
 public class AdminApp {
 
+    private static final String NAME = "sendito-master";
+    private static final String URI = "http://46.101.145.49";
+
     /**
      * Starts the application.
      *
@@ -26,7 +29,7 @@ public class AdminApp {
     public static void main(String[] args) {
         try {
             HttpClient httpClient = new StdHttpClient.Builder()
-                    .url("http://localhost:5984")
+                    .url(URI)
                     .build();
 
             CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
@@ -37,7 +40,7 @@ public class AdminApp {
             MessageRepository messageRepository = new MessageRepository(db);
 
             ServerRepository serverRepository = new ServerRepository(db);
-            serverRepository.add(new Server("Localhost", "http://localhost:5984"));
+            serverRepository.add(new Server(NAME, URI));
 
             ServerList list = new ServerList(new File("servers.list"));
             list.updateFromRepository(serverRepository);

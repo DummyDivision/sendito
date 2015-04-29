@@ -98,4 +98,12 @@ public class MessageRepository extends CouchDbRepositorySupport<Message> impleme
     public String getSelf() {
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Message> getAllMessages() {
+        // No time to figure out a better way to do this
+        return this.getAll();
+    }
 }

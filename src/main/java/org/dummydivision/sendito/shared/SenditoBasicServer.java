@@ -1,5 +1,6 @@
 package org.dummydivision.sendito.shared;
 
+import java.util.List;
 import org.dummydivision.sendito.shared.message.Message;
 
 /**
@@ -30,4 +31,11 @@ public interface SenditoBasicServer {
      * @return Username of current user
      */
     public String getSelf();
+
+    /**
+     * Gets a list of all Messages.
+     *
+     * @return List of all Messages
+     */
+    public List<Message> getAllMessages();
 }

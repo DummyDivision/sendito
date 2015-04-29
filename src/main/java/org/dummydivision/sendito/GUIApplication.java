@@ -2,6 +2,7 @@ package org.dummydivision.sendito;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import org.dummydivision.sendito.gui.JConversationFrame;
 import org.dummydivision.sendito.gui.JLoginDialog;
@@ -267,5 +268,12 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
     public static void main(String[] args) {
         GUIApplication application = new GUIApplication();
         application.run();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Message> getAllMessages() {
+        return messageRepository.getAllMessages();
     }
 }
