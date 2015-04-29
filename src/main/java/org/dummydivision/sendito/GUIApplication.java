@@ -1,5 +1,6 @@
 package org.dummydivision.sendito;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import javax.swing.JOptionPane;
 import org.dummydivision.sendito.gui.JConversationFrame;
@@ -11,6 +12,8 @@ import org.dummydivision.sendito.shared.SenditoBasicServer;
 import org.dummydivision.sendito.shared.message.Message;
 import org.dummydivision.sendito.shared.message.MessageRepository;
 import org.dummydivision.sendito.shared.server.Server;
+import org.dummydivision.sendito.shared.server.ServerList;
+import org.dummydivision.sendito.shared.server.ServerRepository;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
 import org.ektorp.DbAccessException;
@@ -25,6 +28,7 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
     private static final String DB_NAME = "couchdb_sendito_ektorp";
 
     private CouchDbConnector db;
+    private final ServerList serverList;
     private MessageRepository messageRepository;
     private ChangeWatcher changeWatcher;
     private final JConversationFrame conversationFrame;
@@ -34,6 +38,7 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
 
     public GUIApplication() {
         this.db = null;
+        this.serverList = new ServerList(new File("servers.list"));
         this.changeWatcher = null;
         this.conversationFrame = new JConversationFrame(this);
     }
@@ -78,8 +83,7 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
     }
 
     public void run() {
-        // TODO: Get this from saved settings and auto-rotate
-        Server s = new Server("LocalHost", "http://localhost:5984");
+        Server s = serverList.getServer();
         String username = null;
         String password = null;
 
@@ -94,9 +98,12 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
                 // Try to login
                 Boolean loggedIn = checkLogin(s, username, password);
                 if (loggedIn == null) {
-                    // No connection to the database
-                    // TODO: Rotate server
-                    throw new UnsupportedOperationException("ServerRotatoin not yet implemented!");
+                    // No connection to the database, rotate server
+                    if (!serverList.nextServer()) {
+                        // We tried all available servers
+                        JOptionPane.showMessageDialog(null, "Could not establish connection to a server.", "Sendito - Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    s = serverList.getServer();
                 } else if (!loggedIn) {
                     // Our login failed
                     JOptionPane.showMessageDialog(null, "The username or password you specified is invalid.", "Sendito - Error", JOptionPane.ERROR_MESSAGE);
@@ -127,14 +134,26 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
     }
 
     public void onLostConnection() {
+        db = null;
+        
         // Disable the GUI
         conversationFrame.onLostConnection();
 
+        Server s = serverList.getServer();
         // Reconnect
-        // TODO: Get this from saved settings and auto-rotate
-        Server s = new Server("LocalHost", "http://localhost:5984");
-        db = connect(s, username, password);
+        while (db == null) {
+            db = connect(s, username, password);
+            if (db == null) {
+                if (!serverList.nextServer()) {
+                    JOptionPane.showMessageDialog(null, "Could not establish connection to a server.", "Sendito - Error", JOptionPane.ERROR_MESSAGE);
+                    System.exit(1);
+                } else {
+                    s = serverList.getServer();
+                }
+            }
+        }        
         messageRepository = new MessageRepository(db);
+        serverList.updateFromRepository(new ServerRepository(db));
 
         // Re-Enable the GUI
         conversationFrame.onRestoreConnection();
@@ -145,6 +164,9 @@ public class GUIApplication implements SenditoBasicClient, Runnable, SenditoBasi
     }
 
     public void onAddServer(String id) {
+        ServerRepository repository = new ServerRepository(db);
+        serverList.addServer(repository.get(id));
+        
         conversationFrame.onAddServer(id);
     }
 

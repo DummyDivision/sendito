@@ -29,6 +29,7 @@ public class JInputPanel extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         server.sendMessage(input.getText());
+        input.setText(null);
     }
 
     /*public void setEnabled(boolean bln) {

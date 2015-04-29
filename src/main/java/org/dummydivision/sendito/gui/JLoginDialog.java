@@ -12,7 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import org.dummydivision.sendito.shared.LoginVerifier;
 
 public class JLoginDialog extends JDialog {
 
@@ -52,6 +51,13 @@ public class JLoginDialog extends JDialog {
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
+        username.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                success = true;
+                setVisible(false);
+            }
+        });
         loginPanel.add(username, gbc);
 
         JLabel lblPassword = new JLabel("Password:");
@@ -64,6 +70,13 @@ public class JLoginDialog extends JDialog {
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
+        password.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                success = true;
+                setVisible(false);
+            }
+        });
         loginPanel.add(password, gbc);
 
         return loginPanel;

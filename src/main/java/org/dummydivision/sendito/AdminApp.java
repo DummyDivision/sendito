@@ -1,7 +1,10 @@
 package org.dummydivision.sendito;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import org.dummydivision.sendito.shared.message.MessageRepository;
+import org.dummydivision.sendito.shared.server.Server;
+import org.dummydivision.sendito.shared.server.ServerList;
 import org.dummydivision.sendito.shared.server.ServerRepository;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
@@ -24,6 +27,9 @@ public class AdminApp {
             db.createDatabaseIfNotExists();
             MessageRepository messageRepository = new MessageRepository(db);
             ServerRepository serverRepository = new ServerRepository(db);
+            serverRepository.add(new Server("Localhost", "http://localhost:5984"));
+            ServerList list = new ServerList(new File("servers.list"));
+            list.updateFromRepository(serverRepository);
         } catch (MalformedURLException ex) {
             System.out.println(ex);
         }
